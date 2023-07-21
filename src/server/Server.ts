@@ -4,10 +4,9 @@ import express from "express";
 const server = express();
 
 server.get("/", (_, res) => {
-  return res.send("Olá, DEV!")
-})
-
+  return res.send("Olá, DEV!");
+});
 
 
 // exportar a instãncia do servidor
-export { server }
+export { server };
