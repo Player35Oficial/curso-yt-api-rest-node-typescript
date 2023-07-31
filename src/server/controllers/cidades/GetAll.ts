@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
 import { StatusCodes } from "http-status-codes";
+import { CidadesProvider } from "../../database/providers/cidades";
 
 interface IQueryProps {
   page?: number;
@@ -21,10 +22,9 @@ export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
   res.setHeader("access-control-expose-headers", "x-total-count");
   res.setHeader("x-total-count", 1);
 
-  return res.status(StatusCodes.OK).json([
-    {
-      id: 1,
-      nome: "Caxias do sul",
-    }
-  ]);
+  const { filter, limit, page } = req.query;
+
+  const results = await CidadesProvider.getAll(filter || "", limit || 10, page || 1);
+
+  return res.status(StatusCodes.OK).json(results);
 };
