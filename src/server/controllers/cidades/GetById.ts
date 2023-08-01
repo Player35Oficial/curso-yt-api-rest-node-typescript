@@ -33,15 +33,8 @@ export const getById = async (req: Request<IParamProps>, res: Response) => {
         default: result.message,
       }
     });
+  } else {
+    return res.status(StatusCodes.OK).json(result);
   }
-
-  return res.status(StatusCodes.OK).json(result);
-
-
-  // if (Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-  //   errors: {
-  //     default: "Registro não encontrado"
-  //   }
-  // });
 
 };
