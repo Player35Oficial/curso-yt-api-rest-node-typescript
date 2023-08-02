@@ -1,5 +1,6 @@
 
 // Criando enumerador para os numeros das tabelas
 export enum ETableNames {
-  cidade = "cidade"
+  cidade = "cidade",
+  pessoa = "pessoa",
 }
