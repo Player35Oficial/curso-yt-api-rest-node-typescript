@@ -13,16 +13,16 @@ interface IQueryProps {
 
 export const getAllValidation = validation((getSchema) => ({
   query: getSchema<IQueryProps>(yup.object().shape({
-    page: yup.number().optional().moreThan(0),
-    limit: yup.number().optional().moreThan(0),
-    filter: yup.string().optional()
+    page: yup.number().optional().moreThan(0).default(1),
+    limit: yup.number().optional().moreThan(0).default(7),
+    filter: yup.string().optional().default("")
   }))
 }));
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
   const { filter, limit, page } = req.query;
 
-  const results = await PessoasProvider.getAll(filter || "", limit || 10, page || 1);
+  const results = await PessoasProvider.getAll(filter || "", limit || 7, page || 1);
   const count  = await PessoasProvider.count(filter);
 
   if (results instanceof Error) {

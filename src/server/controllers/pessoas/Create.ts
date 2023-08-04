@@ -6,13 +6,13 @@ import { PessoasProvider } from "../../database/providers/pessoas";
 import { StatusCodes } from "http-status-codes";
 
 // Validar o corpo da requisição
-interface IPessoaProps extends Omit<IPessoa, "id"> { }
+interface IBodyProps extends Omit<IPessoa, "id"> { }
 
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<IPessoaProps>(yup.object().shape({
+  body: getSchema<IBodyProps>(yup.object().shape({
     email: yup.string().email().required(),
     cidadeId: yup.number().integer().required(),
-    nomeCompleto: yup.string().required()
+    nomeCompleto: yup.string().required().min(3)
   }))
 }));
 
