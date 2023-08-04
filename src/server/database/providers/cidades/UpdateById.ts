@@ -8,7 +8,7 @@ export const updateById = async (id: number, cidade: Omit<ICidade, "id">): Promi
 
   try {
     
-    const result = await Knex(ETableNames)
+    const result = await Knex(ETableNames.cidade)
       .update(cidade)
       .where("id", "=", id);
     if (result > 0) return;

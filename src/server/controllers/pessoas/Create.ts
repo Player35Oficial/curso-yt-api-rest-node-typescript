@@ -29,6 +29,6 @@ export const create = async (req: Request<{}, {}, IPessoa>, res: Response) => {
     });
   }
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.CREATED).json(result);
 
 };
