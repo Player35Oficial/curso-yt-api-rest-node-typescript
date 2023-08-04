@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import * as yup from "yup";
 import { validation } from "../../shared/middleware";
+import  * as yup  from "yup";
+import { PessoasProvider } from "../../database/providers/pessoas";
 import { StatusCodes } from "http-status-codes";
-import { CidadesProvider } from "../../database/providers/cidades";
+
 
 interface IQueryProps {
   id?: number,
@@ -23,19 +24,19 @@ export const getAllValidation = validation((getSchema) => ({
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
   const { id, filter, limit, page } = req.query;
 
-  const results = await CidadesProvider.getAll(filter || "", limit || 10, page || 1, Number(id));
-  const count = await CidadesProvider.count(filter);
+  const results = await PessoasProvider.getAll(filter || "", limit || 10, page || 1, Number(id));
+  const count  = await PessoasProvider.count(filter);
 
   if (results instanceof Error) {
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: { default: results.message }
     });
   } else if (count instanceof Error) {
-    return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: { default: count.message }
     });
   }
-  
+
   res.setHeader("access-control-expose-headers", "x-total-count");
   res.setHeader("x-total-count", count);
 
