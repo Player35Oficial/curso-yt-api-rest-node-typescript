@@ -5,9 +5,20 @@ import { testServer } from "../jest.setup";
 
 describe("Pessoas - GetById", () => {
   let cidadeId: number | undefined = undefined;
+  let accessToken = "";
+  beforeAll(async () => {
+    const email = "getbyid-pessoas@gmail.com";
+    await testServer.post("/cadastrar").send({ nome: "teste", email, senha: "123456789" });
+
+    const signRes = await testServer.post("/entrar").send({ email, senha: "123456789" });
+
+    accessToken = signRes.body.accessToken;
+  });
+
   beforeAll(async () => {
     const resCidade = await testServer
       .post("/cidades")
+      .set({ authorization: `Bearer ${accessToken}` })
       .send({ nome: "Teste" });
 
     cidadeId = resCidade.body;
@@ -17,6 +28,7 @@ describe("Pessoas - GetById", () => {
   it("Busca registro por id", async () => {
     const res1 = await testServer
       .post("/pessoas")
+      .set({ authorization: `Bearer ${accessToken}` })
       .send({
         cidadeId,
         nomeCompleto: "Juca silva",
@@ -26,6 +38,7 @@ describe("Pessoas - GetById", () => {
 
     const resBuscada = await testServer
       .get(`/pessoas/${res1.body}`)
+      .set({ authorization: `Bearer ${accessToken}` })
       .send();
     expect(resBuscada.statusCode).toEqual(StatusCodes.OK);
     expect(resBuscada.body).toHaveProperty("nomeCompleto");
@@ -33,6 +46,7 @@ describe("Pessoas - GetById", () => {
   it("Tenta buscar registro que não existe", async () => {
     const res1 = await testServer
       .get("/pessoas/99999")
+      .set({ authorization: `Bearer ${accessToken}` })
       .send();
 
     expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);

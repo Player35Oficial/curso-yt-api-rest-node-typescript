@@ -62,10 +62,10 @@ describe("Usuários - Access / Sign In", () => {
   it("Erro ao acessar com formato de senha inválido", async () => {
     const signUser = await testServer
       .post("/entrar")
-      .send({ email: "yuri@gmail.com", senha: 1234569 });
+      .send({ email: "yuri@gmail.com", senha: [ true, true ] });
     
-    expect(signUser.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
-    expect(signUser.body).toHaveProperty("errors.default", "Email ou senha inválidos");
+    expect(signUser.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    expect(signUser.body).toHaveProperty("errors.body");
   });
 
   it("Erro ao acessar sem enviar email", async () => {

@@ -4,17 +4,28 @@ import { testServer } from "../jest.setup";
 
 
 describe("Cidades - DeleteById", () => {
+  let accessToken = "";
+  beforeAll(async () => {
+    const email = "deletebyid-cidades@gmail.com";
+    await testServer.post("/cadastrar").send({ nome: "teste", email, senha: "123456789" });
+
+    const signRes = await testServer.post("/entrar").send({ email, senha: "123456789" });
+
+    accessToken = signRes.body.accessToken;
+  });
 
   it("Apaga registro", async () => {
 
     const res1 = await testServer
       .post("/cidades")
+      .set({ authorization: `Bearer ${accessToken}` })
       .send({ nome: "Caxias do sul" });
 
     expect(res1.statusCode).toEqual(StatusCodes.CREATED);
 
     const resApagada = await testServer
       .delete(`/cidades/${res1.body}`)
+      .set({ authorization: `Bearer ${accessToken}` })
       .send();
 
     expect(resApagada.statusCode).toEqual(StatusCodes.NO_CONTENT);
@@ -23,6 +34,7 @@ describe("Cidades - DeleteById", () => {
 
     const res1 = await testServer
       .delete("/cidades/99999")
+      .set({ authorization: `Bearer ${accessToken}` })
       .send();
 
     expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
