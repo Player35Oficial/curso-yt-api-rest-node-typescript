@@ -28,7 +28,10 @@ export const test: Knex.Config = {
 
 export const production: Knex.Config = {
   client: "pg",
-  connection: {
+  connection: process.env.DATABASE_CONNECTION_STRING ? {
+    connectionString: process.env.DATABASE_CONNECTION_STRING,
+    ssl: { rejectUnauthorized: true }
+  } : {
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
     database: process.env.DATABASE_NAME,
