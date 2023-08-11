@@ -8,7 +8,9 @@ import { router } from "./routes";
 // Criar uma instância básica do servidor
 const server = express();
 
-server.use(cors());
+server.use(cors({
+  origin: process.env.ENABLED_CORS?.split(";") || []
+}));
 
 server.use(express.json());
 
