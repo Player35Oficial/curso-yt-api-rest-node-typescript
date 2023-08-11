@@ -9,8 +9,11 @@ import { router } from "./routes";
 const server = express();
 
 server.use(cors({
-  origin: process.env.ENABLED_CORS?.split(";") || []
+  origin: "https://youtube-curso-react-materialui-typescript-integ-player35oficial.vercel.app"
 }));
+// server.use(cors({
+//   origin: process.env.ENABLED_CORS?.split(";") || []
+// }));
 
 server.use(express.json());
 
